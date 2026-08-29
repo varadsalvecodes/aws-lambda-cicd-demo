@@ -1,0 +1,62 @@
+{
+  "pipeline": {
+    "name": "aws-lambda-cicd-demo-pipeline",
+    "roleArn": "arn:aws:iam::337139237066:role/aws-lambda-cicd-codepipeline-role",
+    "artifactStore": {
+      "type": "S3",
+      "location": "aws-lambda-cicd-artifacts-337139237066"
+    },
+    "stages": [
+      {
+        "name": "Source",
+        "actions": [
+          {
+            "name": "GitHubSource",
+            "actionTypeId": {
+              "category": "Source",
+              "owner": "AWS",
+              "provider": "CodeStarSourceConnection",
+              "version": "1"
+            },
+            "configuration": {
+              "ConnectionArn": "arn:aws:codeconnections:ap-south-1:337139237066:connection/8d3363bf-2c33-45e8-8915-64609ad1232c",
+              "FullRepositoryId": "varadsalvecodes/aws-lambda-cicd-demo",
+              "BranchName": "main",
+              "OutputArtifactFormat": "CODE_ZIP"
+            },
+            "outputArtifacts": [
+              {
+                "name": "SourceOutput"
+              }
+            ],
+            "runOrder": 1
+          }
+        ]
+      },
+      {
+        "name": "Deploy",
+        "actions": [
+          {
+            "name": "LambdaDeployment",
+            "actionTypeId": {
+              "category": "Invoke",
+              "owner": "AWS",
+              "provider": "Lambda",
+              "version": "1"
+            },
+            "configuration": {
+              "FunctionName": "aws-lambda-cicd-demo"
+            },
+            "inputArtifacts": [
+              {
+                "name": "SourceOutput"
+              }
+            ],
+            "runOrder": 1
+          }
+        ]
+      }
+    ],
+    "version": 1
+  }
+}

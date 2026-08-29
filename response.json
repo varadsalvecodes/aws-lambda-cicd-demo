@@ -1,0 +1,1 @@
+{"statusCode": 200, "body": "{\"message\": \"Deployment successful\", \"bucket\": \"aws-lambda-cicd-demo-varad-2026\", \"file\": \"index.html\"}"}
